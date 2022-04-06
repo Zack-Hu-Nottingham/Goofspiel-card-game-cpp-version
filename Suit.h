@@ -1,3 +1,6 @@
+#ifndef SUIT_H
+#define SUIT_H
+
 #include <vector>
 #include <algorithm>
 #include <random>
@@ -69,3 +72,6 @@ class Suit {
             cout << endl;
         }
 };
+
+
+#endif

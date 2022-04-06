@@ -23,7 +23,7 @@ int main() {
     HumanPlayer* player = new HumanPlayer();
     ComputerPlayer* computerPlayer = new ComputerPlayer();
 
-    vector<Card> foo = player->getSuit()->getCards();                                ////////// 修改
+    vector<Card> foo = player->getSuit()->getCards();                               
     cout << "Your cards are: ";
     for (int i=0; i<13; i++) {
         cout << foo[i].getString() << " ";

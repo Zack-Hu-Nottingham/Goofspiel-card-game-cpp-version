@@ -3,6 +3,9 @@
 
 #include "Player.h"
 #include "Strategy.h"
+#include "RandomStrategy.h"
+
+using namespace std;
 
 class ComputerPlayer: public Player {
     private:
@@ -12,19 +15,13 @@ class ComputerPlayer: public Player {
     public:
         ComputerPlayer(): Player()
         {
-            strategy = new Random
+            strategy = new RandomStrategy(this->getSuit());
         }
 
         // according to the current strategy, play the card
         int playCard(Card price) {
-
-
-            if (haveCard(price.getValue()+1)) {
-                return price.getValue() + 1;
-            }
-            return -1;
+            return strategy->playCard(price);
         }
-
 
         // change or modify the strategy here
         void learnBehavior(int round, int playerHand, int aiHand, Card price) {
