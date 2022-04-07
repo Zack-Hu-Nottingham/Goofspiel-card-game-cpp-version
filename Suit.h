@@ -71,6 +71,39 @@ class Suit {
             }
             cout << endl;
         }
+
+        bool haveCard(int value) {
+            bool exist = false;
+            vector<Card> cards = this->getCards();
+            for (int i=0; i<cards.size(); i++) {
+                if (cards[i].getValue() == value) {
+                    if (this->deleteCard(i)) { // make sure it is deleted
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        int findBiggest() {
+            vector<Card> cards = this->getCards();
+            
+            int max = 0;
+            int maxCnt = 0;
+
+            for (int i=0; i<cards.size(); i++) {
+                if (cards[i].getValue() >= max) {
+                    max = cards[i].getValue();
+                    maxCnt = i;
+                }
+            }
+
+            if (!this->deleteCard(maxCnt)) { // make sure it is deleted
+                cout << "The card to be deleted not exist";
+            }
+            
+            return max;            
+        }
 };
 
 

@@ -80,9 +80,19 @@ int main() {
         ++ round;
         computerPlayer->learnBehavior(round, playerHand, aiHand, price);
 
-        cout << endl << endl;
+        cout << endl;
     }
-    cout << endl;
     
+    int winOrLose = player->getPoints() - computerPlayer->getPoints();
+    if (winOrLose == 0) {
+        cout << "This is a tie." << endl;
+    } else if (winOrLose > 0) {
+        cout << "Well done, you win the game!" << endl;
+    } else {
+        cout << "Oops, you lose the game" << endl;
+    }
+
+    cout << "Your score is: " << player->getPoints();
+    cout << " AI score is: " << computerPlayer->getPoints();
 
 }

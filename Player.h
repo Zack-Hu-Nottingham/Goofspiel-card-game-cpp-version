@@ -26,16 +26,8 @@ class Player {
         }
 
         bool haveCard(int value) {
-            bool exist = false;
-            vector<Card> cards = this->getSuit()->getCards();
-            for (int i=0; i<cards.size(); i++) {
-                if (cards[i].getValue() == value) {
-                    if (this->getSuit()->deleteCard(i)) { // make sure it is deleted
-                        return true;
-                    }
-                }
-            }
-            return false;
+
+            return suit->haveCard(value);
         }
         
 };
