@@ -14,6 +14,10 @@ class RandomStrategy: public Strategy {
         RandomStrategy(Suit* suit): Strategy(suit) {
         }
 
+        void displayStrategy() {
+            cout << "random strategy." << endl;
+        }
+
         int playCard(Card price) {
             Card randomChoice = this->getSuit()->pop(true); // randomly pop a card from suit
             return randomChoice.getValue();

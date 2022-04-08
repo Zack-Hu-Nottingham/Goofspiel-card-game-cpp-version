@@ -19,6 +19,10 @@ class ComputerPlayer: public Player {
         {
             strategy = new MatchStrategy(this->getSuit());
         }
+        
+        ~ComputerPlayer() {
+            delete(strategy);
+        }
 
         // according to the current strategy, play the card
         int playCard(Card price) {
@@ -43,13 +47,18 @@ class ComputerPlayer: public Player {
             } else if (isWin == -1) {
                 if (loseCnt >= 2){
                     // switch algorithm
+                    delete(strategy);
                     strategy = new RandomStrategy(this->getSuit());
                 }
             
             } else if (isWin == 0) {
                 // continue?
-                
+
             }
+        }
+
+        void displayStrategy() {
+            strategy->displayStrategy();
         }
 };
 

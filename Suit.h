@@ -10,6 +10,8 @@
 
 using namespace std;
 
+bool sortHelper(Card a, Card b) { return (a.getValue() > b.getValue()); } 
+
 class Suit {
     private:
         vector<Card> cards;
@@ -104,7 +106,35 @@ class Suit {
             
             return max;            
         }
+        
+        int findJustBigger(int value) {
+            vector<Card> cards = this->getCards();
+            
+            int bigger = 14;
+            int biggerCnt = 0;
+
+            for (int i=0; i<cards.size(); i++) {
+                if (cards[i].getValue() >= value && cards[i].getValue() < bigger) {
+                    bigger = cards[i].getValue();
+                    biggerCnt = i;
+                }
+            }
+            if (bigger == 14) { // which means no bigger cards exist
+                sort(cards.begin(), cards.end(), sortHelper);
+                Card c = cards[0];
+                // 可以适当插入摆烂算法
+                return c.getValue();
+            }
+
+            if (!this->deleteCard(biggerCnt)) { // make sure it is deleted
+                cout << "The card to be deleted not exist";
+            }
+            
+            return bigger;
+        }
 };
+
+
 
 
 #endif

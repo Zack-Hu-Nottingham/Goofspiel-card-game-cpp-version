@@ -12,6 +12,11 @@ class Player {
             suit = new Suit();
         }
 
+        ~Player() {
+            // free malloced memory
+            delete(suit);
+        }
+
         void earnPoints(int points) {
             // cout << "points are: " << points << endl;
             this->points += points;

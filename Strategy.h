@@ -16,6 +16,9 @@ class Strategy {
             return 0;
         }
         
+        virtual void displayStrategy() {
+
+        }
 
         Strategy(Suit* suit) {
             this->suit = suit;
