@@ -12,6 +12,8 @@ class ComputerPlayer: public Player {
     private:
         Strategy* strategy;
         int loseCnt = 0;
+        int tieCnt = 0;
+        int tieValue = 0;
 
 
     public:
@@ -48,12 +50,18 @@ class ComputerPlayer: public Player {
                 if (loseCnt >= 2){
                     // switch algorithm
                     delete(strategy);
-                    strategy = new RandomStrategy(this->getSuit());
+                    // strategy = new RandomStrategy(this->getSuit());
                 }
             
             } else if (isWin == 0) {
                 // continue?
+                tieCnt += 1;
+                tieValue += price.getValue();
+            }
 
+            if (this->getPoints() >= (91-tieValue)/2) {
+                delete(strategy);
+                strategy = new RandomStrategy(this->getSuit());
             }
         }
 
