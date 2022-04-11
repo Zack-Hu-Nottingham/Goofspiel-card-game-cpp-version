@@ -7,39 +7,61 @@
 #include "ComputerPlayer.h"
 
 class MatchStrategy: public Strategy {
+    private:
+        float suggestValue = 0;
     public:
-        MatchStrategy(Suit* suit): Strategy(suit) {
+        MatchStrategy(Suit* suit, Record* record): Strategy(suit, record) {
 
         }
         
+        void setSuggestValue(float suggestValue) {
+            this->suggestValue = suggestValue;
+        }
+
+        float getSuggestValue() {
+            return suggestValue;
+        }
+
         void displayStrategy() {
-            cout << "match strategy." << endl;
+            cout << "Match strategy." << endl;
         }
 
         int playCard(Card price) {
-            // randomly generate a bonus
-            srand((unsigned)time(NULL));
-            int bonus = rand() % 2 + 1;
-            cout << "bonus:" << bonus << endl;
-            
-            // if the card with value = (price + bonus) exits
-            // play that card
-            if (this->getSuit()->haveCard(price.getValue()+bonus)) { // find and delete
-                return price.getValue() + bonus;
-            }
-
-            // if not exists, try to use alternative card
-            if (bonus == 2 && this->getSuit()->haveCard(price.getValue() + 1)) {
-                return price.getValue() + 1;
-            }
-            if (bonus == 1 && this->getSuit()->haveCard(price.getValue() + 2)) {
-                return price.getValue() + 2;
-            }
-
-            // if either card with extra bonus=1, bonus=2 does 
-            // not exists
-            return this->getSuit()->findJustBigger(price.getValue());
+            return playMatchCard(price);
         }
+
+        int playMatchCard(Card price) {
+
+            int suggestCard = ((int)(price.getValue() + ceil(suggestValue))) % 13 + 1;
+            cout << "Match strategy want to play card " << suggestCard << endl;
+
+            if (this->getSuit()->haveCard(suggestCard)) { // 如果推荐卡不存在
+                return suggestCard;
+            }
+
+            if (price.getValue() >= 8) { //对于高价值的卡
+                for (int i=0; i<3; i++) {
+                    // if (this->getSuit()->existCard(suggestCard-i)) {
+
+                    // }
+                    if (this->getRecord()->getPlayerSuit()->existCard(suggestCard-i)) {
+                        //如果对手有那张牌
+                        //如果我有那么兑掉
+                        if (this->getSuit()->haveCard(suggestCard-i)) {
+                            return suggestCard-i;
+                        }
+                        //如果我没有，对方大概率会打，所以摆烂
+                        return this->getSuit()->findSmallest();
+                    }
+                }
+                
+            }
+            //对于低价值的卡
+            //二话不说直接开摆！
+            cout << "low value card bailan" << endl;
+            return this->getSuit()->findSmallest();
+        }
+
 };
 
 #endif

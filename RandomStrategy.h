@@ -11,7 +11,7 @@ using namespace std;
 
 class RandomStrategy: public Strategy {
     public:
-        RandomStrategy(Suit* suit): Strategy(suit) {
+        RandomStrategy(Suit* suit, Record* record): Strategy(suit, record) {
         }
 
         void displayStrategy() {

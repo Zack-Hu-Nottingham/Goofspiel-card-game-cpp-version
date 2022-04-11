@@ -4,6 +4,7 @@
 #include "Suit.h"
 #include "ComputerPlayer.h"
 #include "HumanPlayer.h"
+#include "Record.h"
 
 #define ROUND_OF_GAME 1 
 #define LEVEL_OF_INTELLIGENCE 1
@@ -19,9 +20,14 @@ int main() {
     // initialize prize suit
     Suit* valueDeck = new Suit(true);
 
+    // initialize record
+    Record * record = new Record();
+
     // initialize computer player and human player
     HumanPlayer* player = new HumanPlayer();
-    ComputerPlayer* computerPlayer = new ComputerPlayer();
+    ComputerPlayer* computerPlayer = new ComputerPlayer(record);
+
+    record->addSuit(player->getSuit(), computerPlayer->getSuit());
 
     vector<Card> foo = player->getSuit()->getCards();                               
     cout << "Your cards are: ";
@@ -32,13 +38,13 @@ int main() {
     
     Card price;
     int playerHand, aiHand;
-    int round = 0;
     bool isInputValid = false;
+    int round = 0;
     while(valueDeck->getCards().size() >= 1) {
 
         // randomly pop an value card;
         price = valueDeck->pop();
-        cout << "The current price card is: " << price.getString() << endl;
+        cout << "Round: " << ++round <<" The current price card is: " << price.getString() << endl;
         cout << "Your remain cards are: ";
         player->getSuit()->display();
         cout << "AI's remain cards are: ";
@@ -78,12 +84,14 @@ int main() {
         cout << "AI's current points are: " << computerPlayer->getPoints() << endl;
         cout << endl;
 
-        ++ round;
-        computerPlayer->learnBehavior(round, playerHand, aiHand, price);
+        record->add(aiHand, playerHand, price.getValue());
+
+        computerPlayer->learnBehavior();
 
         cout << endl;
     }
     
+    // Check if user win or AI win
     int winOrLose = player->getPoints() - computerPlayer->getPoints();
     if (winOrLose == 0) {
         cout << "This is a tie." << endl;
@@ -96,7 +104,8 @@ int main() {
     cout << "Your score is: " << player->getPoints();
     cout << " AI score is: " << computerPlayer->getPoints() << endl;
 
-    // clean the memory leakage
+    // free the memory used
+    delete(record);
     delete(computerPlayer);
     delete(player);
     delete(valueDeck);

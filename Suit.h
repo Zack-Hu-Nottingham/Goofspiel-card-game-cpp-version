@@ -74,7 +74,7 @@ class Suit {
             cout << endl;
         }
 
-        bool haveCard(int value) {
+        bool haveCard(int value) { //改名find and delete
             bool exist = false;
             vector<Card> cards = this->getCards();
             for (int i=0; i<cards.size(); i++) {
@@ -87,11 +87,23 @@ class Suit {
             return false;
         }
 
+        bool existCard(int value) {
+            bool exist = false;
+            vector<Card> cards = this->getCards();
+            for (int i=0; i<cards.size(); i++) {
+                if (cards[i].getValue() == value) {
+                    return true;
+                }
+            }
+            return false;
+
+        }
+
         int findBiggest() {
             vector<Card> cards = this->getCards();
             
             int max = 0;
-            int maxCnt = 0;
+            int maxCnt = -1;
 
             for (int i=0; i<cards.size(); i++) {
                 if (cards[i].getValue() >= max) {
@@ -106,12 +118,32 @@ class Suit {
             
             return max;            
         }
+
+        int findSmallest() {
+            vector<Card> cards = this->getCards();
+            
+            int min = 14;
+            int minCnt = -1;
+
+            for (int i=0; i<cards.size(); i++) {
+                if (cards[i].getValue() <= min) {
+                    min = cards[i].getValue();
+                    minCnt = i;
+                }
+            }
+
+            if (!this->deleteCard(minCnt)) { // make sure it is deleted
+                cout << "The card to be deleted not exist";
+            }
+            
+            return min;            
+        }
         
         int findJustBigger(int value) {
             vector<Card> cards = this->getCards();
             
             int bigger = 14;
-            int biggerCnt = 0;
+            int biggerCnt = -1;
 
             for (int i=0; i<cards.size(); i++) {
                 if (cards[i].getValue() >= value && cards[i].getValue() < bigger) {
@@ -123,6 +155,9 @@ class Suit {
                 sort(cards.begin(), cards.end(), sortHelper);
                 Card c = cards[0];
                 // 可以适当插入摆烂算法
+                
+                this->deleteCard(0);
+
                 return c.getValue();
             }
 
