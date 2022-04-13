@@ -14,7 +14,7 @@ class GeneralStrategy: public Strategy {
     private:
         int rate = 8;
     public:
-        GeneralStrategy(Suit* suit, Record* record): Strategy(suit, record) {}
+        GeneralStrategy(Hand* hand, Record* record): Strategy(hand, record) {}
 
         void displayStrategy() {
             cout << "General strategy." << endl;
@@ -24,10 +24,10 @@ class GeneralStrategy: public Strategy {
             
             int round = this->getRecord()->getRound();
             int* prices = this->getRecord()->getPrice();
-            int* aiHand = this->getRecord()->getAiHand();
-            int* playerHand = this->getRecord()->getPlayerHand();
-            Suit* playerSuit = this->getRecord()->getPlayerSuit();
-            Suit* aiSuit = this->getRecord()->getAISuit();
+            // int* aiHand = this->getRecord()->getAiHand();
+            // int* playerHand = this->getRecord()->getPlayerHand();
+            Hand* playerHand = this->getRecord()->getPlayerHand();
+            Hand* aiHand = this->getRecord()->getAIHand();
 
             // If it is the first round, take special care
             if (round == 0) {
@@ -36,7 +36,7 @@ class GeneralStrategy: public Strategy {
                 if (price.getValue() <= 6 && i >= 3) {
                     // play the smallest card
                     // cout << "first round bailan" << endl;
-                    return this->getSuit()->findAndDeleteSmallest();
+                    return this->getHand()->findAndDeleteSmallest();
                 } else {
                     // play card normally
                     return playMatchCard(price);
@@ -50,7 +50,7 @@ class GeneralStrategy: public Strategy {
                 int i = (rand() % 10);
                 if (i <= rate) {
                     // cout << "later bailan" << endl;
-                    return this->getSuit()->findAndDeleteSmallest();
+                    return this->getHand()->findAndDeleteSmallest();
                 }
             }
             return playMatchCard(price);
@@ -64,20 +64,20 @@ class GeneralStrategy: public Strategy {
             
             // if the card with value = (price + bonus) exits
             // play that card
-            if (this->getSuit()->findAndDelete(price.getValue()+bonus)) { // find and delete
+            if (this->getHand()->findAndDelete(price.getValue()+bonus)) { // find and delete
                 return price.getValue() + bonus;
             }
 
             // if not exists, try to use alternative card
-            if (bonus == 2 && this->getSuit()->findAndDelete(price.getValue() + 1)) {
+            if (bonus == 2 && this->getHand()->findAndDelete(price.getValue() + 1)) {
                 return price.getValue() + 1;
             }
-            if (bonus == 1 && this->getSuit()->findAndDelete(price.getValue() + 2)) {
+            if (bonus == 1 && this->getHand()->findAndDelete(price.getValue() + 2)) {
                 return price.getValue() + 2;
             }
 
             // if either card with extra bonus=1, bonus=2 does not exists
-            return this->getSuit()->findJustBigger(price.getValue());
+            return this->getHand()->findJustBigger(price.getValue());
         }
 };
 

@@ -1,7 +1,7 @@
 #ifndef RECORD_H
 #define RECORD_H
 
-#include "Suit.h"
+#include "Hand.h"
 
 /*
  * Record class is used to save the record of the game
@@ -11,58 +11,58 @@
 class Record {
     private:
         int round;
-        int aiHand[13];         // record ai played card at each round
-        int playerHand[13];     // record human played card at each round
+        int aiPlayedCards[13];         // record ai played card at each round
+        int humanPlayedCards[13];     // record human played card at each round
         int price[13];
-        Suit* playerSuit;
-        Suit* aiSuit;
+        Hand* playerHand;
+        Hand* aiHand;
 
     public:
         Record() {
             round = 0;
             for (int i=0; i<13; i++) {
-                aiHand[i] = 0;
-                playerHand[i] = 0;
+                aiPlayedCards[i] = 0;
+                humanPlayedCards[i] = 0;
                 price[i] = 0;
             }
         }
 
         // add a piece of record
-        void add(int aiHand, int playerHand, int price) {
-            this->aiHand[round] = aiHand;
-            this->playerHand[round] = playerHand;
+        void add(int aiPlayedCards, int humanPlayedCards, int price) {
+            this->aiPlayedCards[round] = aiPlayedCards;
+            this->humanPlayedCards[round] = humanPlayedCards;
             this->price[round] = price;
             round ++;
         }
 
         // add human and ai's cards
-        void addSuit(Suit* playerSuit, Suit* aiSuit) {
-            this->playerSuit = playerSuit;
-            this->aiSuit = aiSuit;
+        void addHand(Hand* playerHand, Hand* aiHand) {
+            this->playerHand = playerHand;
+            this->aiHand = aiHand;
         }
 
         int getRound() {
             return round;
         }
 
-        int* getAiHand() {
-            return aiHand;
+        int* getAiPlayedCards() {
+            return aiPlayedCards;
         }
 
-        int* getPlayerHand() {
-            return playerHand;
+        int* getHumanPlayedCards() {
+            return humanPlayedCards;
         }
 
         int* getPrice() {
             return price;
         }
 
-        Suit* getPlayerSuit() {
-            return playerSuit;
+        Hand* getPlayerHand() {
+            return playerHand;
         }
         
-        Suit* getAISuit() {
-            return aiSuit;
+        Hand* getAIHand() {
+            return aiHand;
         }
 };
 

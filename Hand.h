@@ -1,5 +1,5 @@
-#ifndef SUIT_H
-#define SUIT_H
+#ifndef HAND_H
+#define HAND_H
 
 #include <vector>
 #include <algorithm>
@@ -11,27 +11,27 @@
 using namespace std;
 
 /*
- * Suit class is kind bit like a collection of Cards.
+ * Hand class is kind bit like a collection of Cards.
  * It provides a serise of CRUD operation on the cards.
 */
 
 bool sortHelper(Card a, Card b) { return (a.getValue() > b.getValue()); } 
 
-class Suit {
+class Hand {
     private:
         vector<Card> cards;
 
     public:
 
-        Suit(bool isRandom = false) {
+        Hand(bool isRandom = false) {
 
-            // Initialize the suit with 13 cards
+            // Initialize the hand with 13 cards
             for (int i=1; i<14; i++) {
                 Card card(i);
                 cards.push_back(card);
             }
 
-            // If want random suit, shuffle the suit
+            // If want random hand, shuffle the hand
             if (isRandom) {
                 unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
                 std::default_random_engine e(seed);
@@ -74,7 +74,7 @@ class Suit {
             }
         }
 
-        // Display all the cards inside the suit
+        // Display all the cards inside the hand
         void display() {
             for (int i=0; i<cards.size(); i++) {
                 cout << (cards.begin()+i)->getString() << " ";

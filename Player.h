@@ -9,17 +9,17 @@
 class Player {
     private:
         int points; // points that player earned
-        Suit* suit; // player's cards
+        Hand* hand; // player's hand
         
     public:
         Player() {
             points = 0;
-            suit = new Suit();
+            hand = new Hand();
         }
 
         ~Player() {
             // free malloced memory
-            delete(suit);
+            delete(hand);
         }
 
         void earnPoints(int points) {
@@ -30,12 +30,12 @@ class Player {
             return points;
         }
 
-        Suit* getSuit() {
-            return suit;
+        Hand* getHand() {
+            return hand;
         }
 
         bool findAndDelete(int value) {
-            return suit->findAndDelete(value);
+            return hand->findAndDelete(value);
         }
         
 };

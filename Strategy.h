@@ -2,7 +2,7 @@
 #define STRATEGY_H
 
 #include <vector>
-#include "Suit.h"
+#include "Hand.h"
 #include "Record.h"
 
 using namespace std;
@@ -14,12 +14,12 @@ using namespace std;
 class Strategy {
     private:
         vector<Card> cardPlayed;
-        Suit* suit;
+        Hand* hand;
         Record* record;
 
     public:
-        Strategy(Suit* suit, Record* record) {
-            this->suit = suit;
+        Strategy(Hand* hand, Record* record) {
+            this->hand = hand;
             this->record = record;
         }
 
@@ -28,7 +28,7 @@ class Strategy {
         virtual void displayStrategy() {}       
         virtual void setSuggestValue(float match) {} 
 
-        Suit* getSuit() { return suit; }
+        Hand* getHand() { return hand; }
         Record* getRecord() { return record; }
 };
 

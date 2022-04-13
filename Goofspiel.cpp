@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "Suit.h"
+#include "Hand.h"
 #include "AiPlayer.h"
 #include "HumanPlayer.h"
 #include "Record.h"
@@ -22,8 +22,8 @@ int main() {
         return 0;
     }
 
-    // initialize prize suit
-    Suit* valueDeck = new Suit(true);
+    // initialize prize hand
+    Hand* valueDeck = new Hand(true);
 
     // initialize record, which would be used to help ai learning
     Record * record = new Record();
@@ -32,12 +32,12 @@ int main() {
     HumanPlayer* player = new HumanPlayer();
     AiPlayer* aiPlayer = new AiPlayer(record);
 
-    // add the pointers of suits to the record, to let the record have comperhensive view
-    record->addSuit(player->getSuit(), aiPlayer->getSuit());
+    // add the pointers of hands to the record, to let the record have comperhensive view
+    record->addHand(player->getHand(), aiPlayer->getHand());
 
 
     Card price;                         // price card
-    int playerHand, aiHand;             // card that ai, human played
+    int humanBid, aiBid;                // card that ai, human bid
     bool isInputValid = false;          // determines user input valid
     int round = 0;                      
 
@@ -51,19 +51,19 @@ int main() {
         cout << endl << "Round " << ++round << endl;
         cout <<"The current price card is: " << price.getString() << endl;
         cout << "Your remain cards are: ";
-        player->getSuit()->display();
+        player->getHand()->display();
         cout << "AI's remain cards are: ";
-        aiPlayer->getSuit()->display();
+        aiPlayer->getHand()->display();
         cout << endl << "AI's strategy is ";
         aiPlayer->displayStrategy();
 
         // according to the card, ai select the card it want to play first
-        aiHand = aiPlayer->playCard(price);
+        aiBid = aiPlayer->playCard(price);
 
         // read in user's hand
         while(!isInputValid) {
-            playerHand = player->input_handler();
-            if (playerHand != -1 && player->findAndDelete(playerHand)) {
+            humanBid = player->input_handler();
+            if (humanBid != -1 && player->findAndDelete(humanBid)) {
                 isInputValid = true;
                 cout << endl;
             } else {
@@ -72,13 +72,13 @@ int main() {
         }
         isInputValid = false;
 
-        cout << "The card you played is: " << playerHand;
-        cout << ", the card AI played is: "  << aiHand << endl;
+        cout << "The card you played is: " << humanBid;
+        cout << ", the card AI played is: "  << aiBid << endl;
 
-        if (playerHand > aiHand) {
+        if (humanBid > aiBid) {
             player->earnPoints(price.getValue());
             cout << "You win this turn." << endl;
-        } else if (playerHand < aiHand) {
+        } else if (humanBid < aiBid) {
             aiPlayer->earnPoints(price.getValue());
             cout << "AI win this turn." << endl;
         } else {
@@ -89,7 +89,7 @@ int main() {
         cout << " AI's current points are: " << aiPlayer->getPoints() << endl;
         cout << endl;
 
-        record->add(aiHand, playerHand, price.getValue());
+        record->add(aiBid, humanBid, price.getValue());
 
         aiPlayer->learnBehavior();
 

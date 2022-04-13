@@ -16,7 +16,7 @@ using namespace std;
 
 class RandomStrategy: public Strategy {
     public:
-        RandomStrategy(Suit* suit, Record* record): Strategy(suit, record) {
+        RandomStrategy(Hand* hand, Record* record): Strategy(hand, record) {
         }
 
         void displayStrategy() {
@@ -24,7 +24,7 @@ class RandomStrategy: public Strategy {
         }
 
         int playCard(Card price) {
-            Card randomChoice = this->getSuit()->pop(true); // randomly pop a card from suit
+            Card randomChoice = this->getHand()->pop(true); // randomly pop a card from hand
             return randomChoice.getValue();
         }
 };

@@ -30,9 +30,9 @@ class AiPlayer: public Player {
             this->record = record;
 
             // initialize all the possible strategy
-            generalStrategy = new GeneralStrategy(this->getSuit(), this->record);
-            matchStrategy = new MatchStrategy(this->getSuit(), this->record);
-            randomStrategy = new RandomStrategy(this->getSuit(), this->record);
+            generalStrategy = new GeneralStrategy(this->getHand(), this->record);
+            matchStrategy = new MatchStrategy(this->getHand(), this->record);
+            randomStrategy = new RandomStrategy(this->getHand(), this->record);
             strategy = generalStrategy;
         }
         
@@ -54,15 +54,15 @@ class AiPlayer: public Player {
             int tieValue = 0;   // total value of card that tie
 
             int round = record->getRound();
-            int* aiHand = record->getAiHand();
-            int* playerHand = record->getPlayerHand();
+            int* aiPlayedCards = record->getAiPlayedCards();
+            int* humanPlayedCards = record->getHumanPlayedCards();
             int* price = record->getPrice();
 
             // this part of code is to count the number of win, lose, and tie
             int isWin = 0;
-            if (aiHand[round] > playerHand[round]) {
+            if (aiPlayedCards[round] > humanPlayedCards[round]) {
                 isWin = 1;
-            } else if (aiHand[round] < playerHand[round]) {
+            } else if (aiPlayedCards[round] < humanPlayedCards[round]) {
                 isWin = -1;
             }
             
@@ -74,8 +74,7 @@ class AiPlayer: public Player {
 
             // if score earned is already enough to win the game
             if (this->getPoints() >= (91-tieValue)/2) {
-                // delete(strategy);
-                strategy = randomStrategy;
+                strategy = randomStrategy; // switch strategy
             } else {
                 detectMatchPattern();
             }
@@ -94,26 +93,25 @@ class AiPlayer: public Player {
 
             // take out the information stored in records
             int round = record->getRound();
-            int* aiHand = record->getAiHand();
-            int* playerHand = record->getPlayerHand();
+            int* aiPlayedCards = record->getAiPlayedCards();
+            int* humanPlayedCards = record->getHumanPlayedCards();
             int* price = record->getPrice();
 
             // 
             int cnt[3] = {0};
             for (int i=0; i<round; i++) {
                 // record differences between human played card and the price card
-                int difference = ((playerHand[i] - price[i]) + 13) % 13;
+                int difference = ((humanPlayedCards[i] - price[i]) + 13) % 13;
                 if (difference <= 3) {
                     cnt[difference - 1] += 1;
                 }
             }
 
+            // if for more than five rounds and human have 60% rates that played match cards
+            // ai would switch to the match pattern
             if ((cnt[0] + cnt[1] + cnt[2])/(float)round >= 3/5.0 && round>=5) {
                 useMatchPattern = true;
-                // cout << "player is using match pattern." << endl;
 
-                // 对于match>=6，是亏本的
-                // 对于match<6, 值加一就可以应对
                 int total = 0;
                 for (int i=0; i<3; i++) {
                     total += cnt[i] * (i+1);
@@ -123,6 +121,11 @@ class AiPlayer: public Player {
 
                 strategy = matchStrategy;
                 strategy->setSuggestValue(match);
+            }
+
+            // test code
+            if (!useMatchPattern) {
+                strategy = generalStrategy;
             }
         }
         

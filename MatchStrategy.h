@@ -16,7 +16,7 @@ class MatchStrategy: public Strategy {
     private:
         float suggestValue = 0; // it is the card that ai guess user would play
     public:
-        MatchStrategy(Suit* suit, Record* record): Strategy(suit, record) {}
+        MatchStrategy(Hand* hand, Record* record): Strategy(hand, record) {}
         
         void displayStrategy() {
             cout << "Match strategy." << endl;
@@ -40,34 +40,34 @@ class MatchStrategy: public Strategy {
             cout << "Match strategy want to play card " << suggestCard << endl;
 
             // if ai have the card that is just bigger than human would play
-            if (this->getSuit()->findAndDelete(suggestCard)) { 
+            if (this->getHand()->findAndDelete(suggestCard)) { 
                 return suggestCard;
             }
 
             // //如果当前这张牌是所有卡堆里最高费的卡
-            // if (!this->getSuit()->existBigger(price.getValue())) { 
+            // if (!this->getHand()->existBigger(price.getValue())) { 
             //     cout << "This is the max card. " << endl;
-            //     if (playerSuit->findBiggest() > aiSuit->findBiggest()) { //对方手牌大
+            //     if (playerHand->findBiggest() > aiHand->findBiggest()) { //对方手牌大
             //         cout << "He is bigger than me. " << endl;
-            //         return this->getSuit()->findAndDeleteSmallest();
-            //     } else if (playerSuit->findBiggest() < aiSuit->findBiggest()) { // ai大
+            //         return this->getHand()->findAndDeleteSmallest();
+            //     } else if (playerHand->findBiggest() < aiHand->findBiggest()) { // ai大
             //         cout << "I'm bigger. " << endl;
             //         srand((unsigned)time(NULL)); 
             //         int random = rand() % 10;
             //         if (random < 5) { //出大牌抢下来
             //             cout << "I'll take it." << endl;
-            //             return this->getSuit()->findAndDeleteBiggest();
+            //             return this->getHand()->findAndDeleteBiggest();
             //         } else { //出第二大牌防对手摆烂
             //             cout << "I don't want you bailan." << endl;
-            //             for (int i=playerSuit->findBiggest() - aiSuit->findBiggest(); i>0; i--) {
-            //                 if (this->getSuit()->findAndDelete(aiSuit->findBiggest()-i)) {
-            //                     return aiSuit->findBiggest()-i;
+            //             for (int i=playerHand->findBiggest() - aiHand->findBiggest(); i>0; i--) {
+            //                 if (this->getHand()->findAndDelete(aiHand->findBiggest()-i)) {
+            //                     return aiHand->findBiggest()-i;
             //                 }
             //             }
             //         }
             //     } else { //一样大就兑掉
             //         cout << "手牌一样大，兑掉" << endl;
-            //         return this->getSuit()->findAndDeleteBiggest();
+            //         return this->getHand()->findAndDeleteBiggest();
             //     }
             // }
 
@@ -75,16 +75,16 @@ class MatchStrategy: public Strategy {
             // for cards with higher value
             if (price.getValue() >= 8) { 
                 for (int i=0; i<3; i++) {
-                    if (this->getRecord()->getPlayerSuit()->existCard(suggestCard-i)) {
+                    if (this->getRecord()->getPlayerHand()->existCard(suggestCard-i)) {
                         // if both ai and human player have that card
                         // ai would play that card to prevent human earn score
-                        if (this->getSuit()->findAndDelete(suggestCard-i)) {
+                        if (this->getHand()->findAndDelete(suggestCard-i)) {
                             return suggestCard-i;
                         }
 
                         // if human have that card, but ai don't have
                         // ai would let it go, play the smallest card
-                        return this->getSuit()->findAndDeleteSmallest();
+                        return this->getHand()->findAndDeleteSmallest();
                     }
                 }
                 
@@ -93,7 +93,7 @@ class MatchStrategy: public Strategy {
             // for cards with low value
             // ai would also let it go, play the current smallest card
             cout << "low value card bailan" << endl;
-            return this->getSuit()->findAndDeleteSmallest();
+            return this->getHand()->findAndDeleteSmallest();
         }
 
 };
