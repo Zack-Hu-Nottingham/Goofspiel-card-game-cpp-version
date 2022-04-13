@@ -1,5 +1,5 @@
-#ifndef COMPUTER_PLAYER_H
-#define COMPUTER_PLAYER_H
+#ifndef AI_PLAYER_H
+#define AI_PLAYER_H
 
 #include "Player.h"
 #include "Strategy.h"
@@ -10,24 +10,36 @@
 
 using namespace std;
 
-class ComputerPlayer: public Player {
-    private:
-        Strategy* strategy;
-        Record* record;
-        int loseCnt = 0;
-        int tieCnt = 0;
-        int tieValue = 0;
+/*
+ * AiPlayer is derived from Player.
+ * It contain private field strategy and record.
+*/
 
+class AiPlayer: public Player {
+
+    private:
+        Strategy* strategy;     // strategy that ai is going to apply
+        MatchStrategy* matchStrategy;
+        RandomStrategy* randomStrategy;
+        GeneralStrategy* generalStrategy;
+        Record* record;         // record of the game, help ai learn human player's behavior
 
     public:
-        ComputerPlayer(Record* record): Player()
+        AiPlayer(Record* record): Player()
         {
             this->record = record;
-            strategy = new GeneralStrategy(this->getSuit(), this->record);
+
+            // initialize all the possible strategy
+            generalStrategy = new GeneralStrategy(this->getSuit(), this->record);
+            matchStrategy = new MatchStrategy(this->getSuit(), this->record);
+            randomStrategy = new RandomStrategy(this->getSuit(), this->record);
+            strategy = generalStrategy;
         }
         
-        ~ComputerPlayer() {
-            delete(strategy);
+        ~AiPlayer() {
+            delete(generalStrategy);
+            delete(matchStrategy);
+            delete(randomStrategy);
         }
 
         // according to the current strategy, play the card
@@ -38,67 +50,64 @@ class ComputerPlayer: public Player {
         // change or modify the strategy here
         void learnBehavior() {
 
+            int tieCnt = 0;     // number of games that tie
+            int tieValue = 0;   // total value of card that tie
+
             int round = record->getRound();
             int* aiHand = record->getAiHand();
             int* playerHand = record->getPlayerHand();
             int* price = record->getPrice();
 
+            // this part of code is to count the number of win, lose, and tie
             int isWin = 0;
             if (aiHand[round] > playerHand[round]) {
                 isWin = 1;
-                loseCnt = 0;
             } else if (aiHand[round] < playerHand[round]) {
                 isWin = -1;
-                loseCnt += 1;
             }
-
-            if (isWin == 1) {
-                // detect if player lose it intendedly 
-                
-            } else if (isWin == -1) {
-                if (loseCnt >= 2){
-                    // switch algorithm
-                    delete(strategy);
-                    // strategy = new RandomStrategy(this->getSuit());
-                }
             
-            } else if (isWin == 0) {
-                // continue?
+            if (isWin == 0) {
+                // it is tie, record it
                 tieCnt += 1;
                 tieValue += price[round];
             }
 
+            // if score earned is already enough to win the game
             if (this->getPoints() >= (91-tieValue)/2) {
-                delete(strategy);
-                strategy = new RandomStrategy(this->getSuit(), this->record);
+                // delete(strategy);
+                strategy = randomStrategy;
             } else {
                 detectMatchPattern();
             }
-            // if () // 如果发现多局游戏都在使用match，切换到match
         }
 
+        // display the current strategy that are using, for test purpose
         void displayStrategy() {
             strategy->displayStrategy();
         }
 
+
+        // detect whether human player using deterministic strategy
         void detectMatchPattern() {
 
             bool useMatchPattern = false;
 
+            // take out the information stored in records
             int round = record->getRound();
             int* aiHand = record->getAiHand();
             int* playerHand = record->getPlayerHand();
             int* price = record->getPrice();
 
+            // 
             int cnt[3] = {0};
             for (int i=0; i<round; i++) {
+                // record differences between human played card and the price card
                 int difference = ((playerHand[i] - price[i]) + 13) % 13;
-                // cout << "Difference: " << difference << endl;
                 if (difference <= 3) {
                     cnt[difference - 1] += 1;
                 }
             }
-            // cout << "rate: " << (cnt[0] + cnt[1] + cnt[2])/(float)round<< endl;
+
             if ((cnt[0] + cnt[1] + cnt[2])/(float)round >= 3/5.0 && round>=5) {
                 useMatchPattern = true;
                 // cout << "player is using match pattern." << endl;
@@ -112,14 +121,11 @@ class ComputerPlayer: public Player {
                 float match = ((float)total) / (float)round;
                 cout << "match is: " << match << endl;
 
-                delete(strategy);   
-                strategy = new MatchStrategy(this->getSuit(), this->record);
+                strategy = matchStrategy;
                 strategy->setSuggestValue(match);
-
             }
-
-
         }
+        
 };
 
 #endif

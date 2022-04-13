@@ -1,10 +1,15 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+/*
+ * Player is the base class for HumanPlayer and AiPlayer.
+ * It provide the basic operation on player socre and cards.
+*/
+
 class Player {
     private:
-        int points;
-        Suit* suit;
+        int points; // points that player earned
+        Suit* suit; // player's cards
         
     public:
         Player() {
@@ -18,7 +23,6 @@ class Player {
         }
 
         void earnPoints(int points) {
-            // cout << "points are: " << points << endl;
             this->points += points;
         }
 
@@ -30,9 +34,8 @@ class Player {
             return suit;
         }
 
-        bool haveCard(int value) {
-
-            return suit->haveCard(value);
+        bool findAndDelete(int value) {
+            return suit->findAndDelete(value);
         }
         
 };

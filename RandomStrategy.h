@@ -5,9 +5,14 @@
 
 #include "Strategy.h"
 #include "Card.h"
-#include "ComputerPlayer.h"
+#include "AiPlayer.h"
 
 using namespace std;
+
+/*
+ * Random strategy inherit class strategy, it plays card randomly. 
+ * This strategy is only applied when ai already earned enough score to win.
+*/
 
 class RandomStrategy: public Strategy {
     public:

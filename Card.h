@@ -1,6 +1,10 @@
 #ifndef CARD_H
 #define CARD_H
 
+/*
+ * Class Card, the basic component of this game.
+*/
+
 class Card {
     private:
         int value;
@@ -16,6 +20,7 @@ class Card {
             return value;
         }
 
+        // return the card value in string format
         std::string getString() {
             switch(value){
                 case 1  :

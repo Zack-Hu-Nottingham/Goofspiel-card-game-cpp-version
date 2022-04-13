@@ -7,12 +7,9 @@ class HumanPlayer: public Player {
     private:
 
     public:
-        HumanPlayer(): Player()
-        {
-
-        }
+        HumanPlayer(): Player() {}
         
-        
+        // handle user input
         int input_handler() {
             cout << "Which cards you want to play: ";
             string input;

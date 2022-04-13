@@ -7,6 +7,10 @@
 
 using namespace std;
 
+/*
+ * Strategy class is the base class of a serise of classes. 
+*/
+
 class Strategy {
     private:
         vector<Card> cardPlayed;
@@ -19,18 +23,13 @@ class Strategy {
             this->record = record;
         }
 
-        virtual int playCard(Card price) {
-            return 0;
-        }
-        
+        // abstract methods that could be overloaded
+        virtual int playCard(Card price) { return 0; }        
         virtual void displayStrategy() {}       
         virtual void setSuggestValue(float match) {} 
 
         Suit* getSuit() { return suit; }
-
-        Record* getRecord() { 
-            return record; 
-        }
+        Record* getRecord() { return record; }
 };
 
 #endif
