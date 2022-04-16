@@ -50,12 +50,6 @@ int main() {
         // hints for each round of game
         cout << endl << "Round " << ++round << endl;
         cout <<"The current price card is: " << price.getString() << endl;
-        cout << "Your remain cards are: ";
-        player->getHand()->display();
-        cout << "AI's remain cards are: ";
-        aiPlayer->getHand()->display();
-        cout << endl << "AI's strategy is ";
-        aiPlayer->displayStrategy();
 
         // according to the card, ai select the card it want to play first
         aiBid = aiPlayer->playCard(price);
@@ -72,9 +66,6 @@ int main() {
         }
         isInputValid = false;
 
-        cout << "The card you played is: " << humanBid;
-        cout << ", the card AI played is: "  << aiBid << endl;
-
         if (humanBid > aiBid) {
             player->earnPoints(price.getValue());
             cout << "You win this turn." << endl;
@@ -82,15 +73,22 @@ int main() {
             aiPlayer->earnPoints(price.getValue());
             cout << "AI win this turn." << endl;
         } else {
-            cout << "No one earn the point." << endl;
+            player->earnPoints((float)price.getValue() / (float)2.0);
+            aiPlayer->earnPoints((float)price.getValue() / (float)2.0);
+            cout << "You guys both earned " << (float)price.getValue() / (float)2.0 << " points." << endl;
         }
+
+        // hints on current round of game
+        cout << "The card you played is: " << humanBid;
+        cout << ", the card AI played is: "  << aiBid << endl;
 
         cout << "Your current points are: " << player->getPoints();
         cout << " AI's current points are: " << aiPlayer->getPoints() << endl;
-        cout << endl;
 
+        // record the round of game, for later ai learning
         record->add(aiBid, humanBid, price.getValue());
 
+        // according to the rounds played previously, decides ai's strategy
         aiPlayer->learnBehavior();
 
         cout << endl;

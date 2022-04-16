@@ -8,12 +8,12 @@
 
 class Player {
     private:
-        int points; // points that player earned
+        float points; // points that player earned
         Hand* hand; // player's hand
         
     public:
         Player() {
-            points = 0;
+            points = 0.0;
             hand = new Hand();
         }
 
@@ -22,11 +22,11 @@ class Player {
             delete(hand);
         }
 
-        void earnPoints(int points) {
+        void earnPoints(float points) {
             this->points += points;
         }
 
-        int getPoints() {
+        float getPoints() {
             return points;
         }
 

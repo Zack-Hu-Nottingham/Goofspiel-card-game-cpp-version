@@ -50,8 +50,8 @@ class AiPlayer: public Player {
         // change or modify the strategy here
         void learnBehavior() {
 
-            int tieCnt = 0;     // number of games that tie
-            int tieValue = 0;   // total value of card that tie
+            // int tieCnt = 0;     // number of games that tie
+            // int tieValue = 0;   // total value of card that tie
 
             int round = record->getRound();
             int* aiPlayedCards = record->getAiPlayedCards();
@@ -66,14 +66,15 @@ class AiPlayer: public Player {
                 isWin = -1;
             }
             
-            if (isWin == 0) {
-                // it is tie, record it
-                tieCnt += 1;
-                tieValue += price[round];
-            }
+            // if (isWin == 0) {
+            //     // it is tie, record it
+            //     tieCnt += 1;
+            //     tieValue += price[round];
+            // }
 
             // if score earned is already enough to win the game
-            if (this->getPoints() >= (91-tieValue)/2) {
+            if (this->getPoints() >= ((float)91)/2) {
+            // if (this->getPoints() >= (91-tieValue)/2) {
                 strategy = randomStrategy; // switch strategy
             } else {
                 detectMatchPattern();
