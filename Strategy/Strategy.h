@@ -2,8 +2,8 @@
 #define STRATEGY_H
 
 #include <vector>
-#include "Hand.h"
-#include "Record.h"
+#include "../Hand.h"
+#include "../Record.h"
 
 using namespace std;
 

@@ -2,11 +2,11 @@
 #define AI_PLAYER_H
 
 #include "Player.h"
-#include "Strategy.h"
-#include "RandomStrategy.h"
-#include "MatchStrategy.h"
-#include "GeneralStrategy.h"
-#include "Record.h"
+#include "../Strategy/Strategy.h"
+#include "../Strategy/RandomStrategy.h"
+#include "../Strategy/MatchStrategy.h"
+#include "../Strategy/GeneralStrategy.h"
+#include "../Record.h"
 
 using namespace std;
 

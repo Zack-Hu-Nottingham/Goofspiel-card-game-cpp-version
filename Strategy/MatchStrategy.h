@@ -3,8 +3,8 @@
 
 #include <time.h>
 #include "Strategy.h"
-#include "Card.h"
-#include "AiPlayer.h"
+#include "../Card.h"
+#include "../Player/AiPlayer.h"
 
 /*
  * Match strategy inherit class strategy. 

@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 #include "Strategy.h"
-#include "Card.h"
-#include "AiPlayer.h"
+#include "../Card.h"
+#include "../Player/AiPlayer.h"
 
 using namespace std;
 

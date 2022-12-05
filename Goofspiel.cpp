@@ -2,8 +2,8 @@
 #include <string>
 
 #include "Hand.h"
-#include "AiPlayer.h"
-#include "HumanPlayer.h"
+#include "Player/AiPlayer.h"
+#include "Player/HumanPlayer.h"
 #include "Record.h"
 
 #define ROUND_OF_GAME 1 
